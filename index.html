@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kampus ITS – Pelaporan Masalah</title>
+<style>
+:root{color-scheme:light;--bg:#fff;--fg:#1a1a1a;--mut:#666;--line:#dcdcdc;--soft:#f1f1f1;--act:#e5e5e5;--navy:#1a3a5c;--navyfg:#fff;
+--w-bg:#fdf0c4;--w-fg:#7a5a00;--p-bg:#e1ebf8;--p-fg:#1d3f6e;--d-bg:#dff1e3;--d-fg:#1b5a2b;--err:#b3261e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,textarea{font:inherit;color:inherit}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+.brand{font-weight:600;color:var(--mut);letter-spacing:.02em}
+nav.top{display:flex;gap:8px}
+nav button,.prof{background:none;border:0;padding:10px 24px;border-radius:6px;cursor:pointer;color:var(--mut)}
+nav button.on{background:var(--act);color:var(--fg);font-weight:600}
+.prof{display:flex;gap:8px;align-items:center;padding:8px}
+svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+main{max-width:1120px;margin:0 auto;padding:48px 24px 120px}
+h1{font-size:32px;margin:0 0 6px;line-height:1.2}
+.sub{color:var(--mut);margin:0 0 36px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.card{border:1px solid var(--line);border-radius:6px;padding:32px;background:var(--bg)}
+.ico{width:56px;height:56px;background:var(--soft);border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;margin-bottom:24px}
+.card h2{font-size:22px;margin:0 0 28px}
+.btn{width:100%;padding:14px;border:1px solid var(--line);border-radius:4px;background:var(--bg);font-weight:600;cursor:pointer}
+.btn.dark{background:var(--act);border-color:var(--fg)}
+.btn.send{background:var(--navy);color:var(--navyfg);border-color:var(--navy);width:260px;letter-spacing:.04em}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.form{display:grid;grid-template-columns:1.65fr 1fr;gap:24px;align-items:start}
+.form h3{font-size:18px;margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:500}
+.chip.on{background:var(--act);border-color:var(--fg);font-weight:600}
+.chip.on::before{content:"✓ "}
+textarea,input[type=text]{width:100%;background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+textarea{height:200px;resize:vertical;margin-bottom:16px}
+.loc{display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 16px;color:var(--mut)}
+.loc input{border:0;background:none;padding:14px 0}
+.drop{border:2px dashed var(--line);background:var(--act);border-radius:4px;height:272px;display:grid;place-items:center;text-align:center;cursor:pointer;font-weight:600;position:relative;overflow:hidden}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop .rm{position:absolute;top:8px;right:8px;z-index:2;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer}
+.err{color:var(--err);font-size:13px;margin:-8px 0 12px;min-height:0}
+.bar{border-top:1px solid var(--line);margin-top:24px;padding-top:24px;display:flex;justify-content:flex-end}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--mut);margin-bottom:12px}
+.meta b{color:var(--fg);font-size:14px}
+.tbl{border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.row{display:grid;grid-template-columns:2fr 2fr 1.4fr 1.2fr;gap:12px;padding:0 24px;align-items:center;min-height:96px;border-top:1px solid var(--line);cursor:pointer;background:var(--bg);width:100%;text-align:left;border-left:0;border-right:0;border-bottom:0}
+.row:hover{background:var(--soft)}
+.row.h{min-height:52px;background:var(--soft);font-size:13px;color:var(--mut);font-weight:600;cursor:default;border-top:0}
+.row.h:hover{background:var(--soft)}
+.t{font-weight:600}
+.pl{display:flex;gap:8px;align-items:center;color:var(--mut)}
+.pl svg{width:16px;height:16px}
+.badge{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:600}
+.badge svg{width:14px;height:14px}
+.s0{background:var(--w-bg);color:var(--w-fg)}.s1{background:var(--p-bg);color:var(--p-fg)}.s2{background:var(--d-bg);color:var(--d-fg)}
+.foot{text-align:center;color:var(--mut);font-size:13px;margin-top:18px}
+.cards{display:none}
+.empty{padding:48px 24px;text-align:center;color:var(--mut)}
+.bottom{display:none}
+dialog{border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);max-width:520px;width:calc(100% - 32px);padding:24px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog img{width:100%;border-radius:4px;margin:12px 0;max-height:300px;object-fit:cover}
+dialog h2{margin:0 0 8px}
+dialog .x{margin-top:12px;width:auto;padding:10px 20px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 20px;border-radius:6px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.toast.on{opacity:1}
+.demo{margin-top:20px;font-size:13px;color:var(--mut)}
+.demo button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--mut);padding:0}
+@media (max-width:760px){
+ header{padding:0 16px}nav.top,.prof span{display:none}.brand{font-size:13px;position:absolute;left:50%;transform:translateX(-50%)}
+ main{padding:24px 16px 140px}h1{font-size:30px}
+ .grid{grid-template-columns:1fr;gap:12px}.card{padding:0;border:0}.card .ico,.card h2{display:none}
+ .grid .card:nth-child(1){order:0}.sub{margin-bottom:20px}
+ .form{grid-template-columns:1fr}.btn.send{width:100%}.drop{height:150px}
+ .tbl{display:none}.cards{display:grid;gap:12px}
+ .c{border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:8px;background:var(--bg);text-align:left;cursor:pointer;width:100%}
+ .c .r{display:flex;justify-content:space-between;align-items:center;color:var(--mut);font-size:14px}
+ .bottom{display:flex;position:fixed;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:var(--bg);padding-bottom:env(safe-area-inset-bottom,0px)}
+ .bottom button{flex:1;border:0;background:none;padding:12px 4px;display:grid;justify-items:center;gap:4px;font-size:13px;color:var(--mut);cursor:pointer}
+ .bottom button.on{background:var(--act);color:var(--fg);font-weight:600}
+ .toast{bottom:100px}
+}
+</style>
+</head>
+<body>
+<header>
+ <span class="brand">KAMPUS ITS</span>
+ <nav class="top" id="top"></nav>
+ <button class="prof" id="prof" aria-label="Profil"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M6.2 18.5c1.3-2 3.4-3 5.8-3s4.5 1 5.8 3"/></svg><span>Profil</span></button>
+</header>
+<main id="app"></main>
+<div class="bottom" id="bot"></div>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="dlg"></dialog>
+
+<script>
+var IC={
+ edit:'<svg viewBox="0 0 24 24"><path d="M11 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>',
+ list:'<svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h.01M9 16h.01M12.5 12H16M12.5 16H16"/></svg>',
+ pin:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+ cam:'<svg viewBox="0 0 24 24" style="width:40px;height:40px"><path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="14" r="3.5"/></svg>',
+ clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+ spin:'<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg>',
+ ok:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>'
+};
+var ST=[['Menunggu','clock'],['Sedang Ditangani','spin'],['Selesai','ok']];
+var CATS=['Fasilitas Rusak','Masalah Penerangan','Kebersihan','AC & Listrik','Kebocoran & Air','Toilet','Wi-Fi & Jaringan','Keamanan','Parkir & Jalan','Kebisingan'];
+var MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+var KEY='kampus-its-reports-v1';
+var reports=[],page='home',draft={cat:0,desc:'',loc:'',photo:''};
+
+function load(){try{reports=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){reports=[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(reports))}catch(e){toast('Penyimpanan penuh, foto tidak tersimpan permanen')}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmt(ts){var d=new Date(ts);return String(d.getDate()).padStart(2,'0')+' '+MON[d.getMonth()]+' '+d.getFullYear()}
+function badge(s){return '<span class="badge s'+s+'">'+IC[ST[s][1]]+ST[s][0]+'</span>'}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},2400)}
+
+var TABS=[['home','Beranda',null],['report','Pelaporan Masalah','edit'],['mine','Laporan Saya','list']];
+function nav(){
+ document.getElementById('top').innerHTML=TABS.map(function(t){return '<button data-p="'+t[0]+'" class="'+(page===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('');
+ document.getElementById('bot').innerHTML=TABS.slice(1).map(function(t){return '<button data-p="'+t[0]+'" class="'+(page===t[0]?'on':'')+'">'+IC[t[2]]+t[1]+'</button>'}).join('');
+}
+function go(p){page=p;nav();render();window.scrollTo(0,0)}
+
+function render(){
+ var a=document.getElementById('app');
+ if(page==='home'){
+  a.innerHTML='<h1>Beranda</h1><p class="sub">Laporkan masalah fasilitas kampus dan pantau perkembangan laporan Anda.</p>'+
+  '<div class="grid"><div class="card"><div class="ico">'+IC.edit+'</div><h2>Pelaporan Masalah</h2><button class="btn dark" data-p="report">Tambah Laporan</button></div>'+
+  '<div class="card"><div class="ico">'+IC.list+'</div><h2>Laporan Saya</h2><button class="btn" data-p="mine">Lihat Laporan</button></div></div>';
+ }else if(page==='report'){
+  a.innerHTML='<h1>Pelaporan Masalah</h1><p class="sub">Bantu menjaga kampus tetap aman dan nyaman.</p>'+
+  '<div class="form"><div class="card"><h3>1. Pilih Kategori</h3><div class="chips" id="chips"></div>'+
+  '<h3>2. Deskripsi &amp; Lokasi</h3><textarea id="desc" placeholder="Tuliskan deskripsi terperinci..."></textarea>'+
+  '<div class="loc">'+IC.pin+'<input id="loc" type="text" placeholder="Gedung &amp; Nomor Ruang..."></div><div class="err" id="err"></div></div>'+
+  '<div class="card"><h3>3. Tambahkan Foto (Opsional)</h3><div class="drop" id="drop" tabindex="0" role="button" aria-label="Tambah foto"></div>'+
+  '<input type="file" id="file" accept="image/*" hidden></div></div>'+
+  '<div class="bar"><button class="btn send" id="send">KIRIM LAPORAN</button></div>';
+  document.getElementById('desc').value=draft.desc;document.getElementById('loc').value=draft.loc;
+  chips();drop();
+ }else{
+  var list=reports.slice().sort(function(x,y){return y.ts-x.ts});
+  var rows=list.map(function(r){return '<button class="row" data-id="'+r.id+'"><span class="t">'+esc(r.title)+'</span><span class="pl">'+IC.pin+esc(r.loc)+'</span><span class="pl">'+fmt(r.ts)+'</span><span>'+badge(r.status)+'</span></button>'}).join('');
+  var cards=list.map(function(r){return '<button class="c" data-id="'+r.id+'"><span class="t" style="font-size:17px">'+esc(r.title)+'</span><span class="pl">'+IC.pin+esc(r.loc)+'</span><span class="r">'+badge(r.status)+'<span>'+fmt(r.ts)+'</span></span></button>'}).join('');
+  var empty='<div class="empty">Belum ada laporan. <button class="btn" style="width:auto;padding:10px 20px;margin-top:12px" data-p="report">Tambah laporan pertama</button></div>';
+  a.innerHTML='<h1>Laporan Saya</h1><p class="sub">Pantau perkembangan laporan Anda di kampus.</p>'+
+  '<div class="meta"><b>'+list.length+' laporan</b><span>Terbaru dulu</span></div>'+
+  (list.length?'<div class="tbl"><div class="row h"><span>Masalah</span><span>Lokasi</span><span>Tanggal</span><span>Status</span></div>'+rows+'</div><div class="cards">'+cards+'</div><p class="foot">Semua laporan Anda ditampilkan di sini.</p>':empty)+
+  '<p class="demo">Mode demo: <button id="adv">simulasikan kemajuan status laporan</button></p>';
+ }
+}
+function chips(){
+ var c=document.getElementById('chips');
+ c.innerHTML=CATS.map(function(n,i){return '<button class="chip'+(draft.cat===i?' on':'')+'" data-c="'+i+'">'+n+'</button>'}).join('');
+}
+function drop(){
+ var d=document.getElementById('drop');
+ d.innerHTML=draft.photo?'<img alt="Foto laporan" src="'+draft.photo+'"><button class="rm" id="rm">Hapus</button>':'<div>'+IC.cam+'<br>Tambah Foto</div>';
+}
+function shrink(file,cb){
+ var fr=new FileReader();
+ fr.onload=function(){var im=new Image();im.onload=function(){
+  var m=900,k=Math.min(1,m/Math.max(im.width,im.height)),cv=document.createElement('canvas');
+  cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);
+  cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);cb(cv.toDataURL('image/jpeg',.72))};
+  im.onerror=function(){toast('File bukan gambar yang valid')};im.src=fr.result};
+ fr.readAsDataURL(file);
+}
+function submit(){
+ draft.desc=document.getElementById('desc').value.trim();draft.loc=document.getElementById('loc').value.trim();
+ var e=document.getElementById('err');
+ if(!draft.desc){e.textContent='Isi deskripsi masalah terlebih dahulu.';return}
+ if(!draft.loc){e.textContent='Isi gedung dan nomor ruang.';return}
+ var t=draft.desc.split(/[.\n]/)[0];if(t.length>50)t=t.slice(0,47)+'...';
+ reports.push({id:'r'+Date.now(),ts:Date.now(),cat:draft.cat,title:t,desc:draft.desc,loc:draft.loc,photo:draft.photo,status:0});
+ save();draft={cat:0,desc:'',loc:'',photo:''};toast('Laporan terkirim');go('mine');
+}
+function detail(id){
+ var r=reports.filter(function(x){return x.id===id})[0];if(!r)return;
+ var d=document.getElementById('dlg');
+ d.innerHTML='<h2>'+esc(r.title)+'</h2><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+badge(r.status)+'<span class="pl">'+fmt(r.ts)+' · '+CATS[r.cat]+'</span></div>'+
+ '<p class="pl" style="margin:12px 0 4px">'+IC.pin+esc(r.loc)+'</p>'+(r.photo?'<img alt="Foto laporan" src="'+r.photo+'">':'')+
+ '<p style="white-space:pre-wrap">'+esc(r.desc)+'</p><button class="btn x" id="close">Tutup</button> <button class="btn x" id="del" style="color:var(--err)" data-id="'+r.id+'">Hapus laporan</button>';
+ d.showModal();
+}
+document.addEventListener('click',function(e){
+ var t=e.target.closest('[data-p],[data-c],[data-id],#send,#drop,#rm,#close,#del,#adv,#prof');if(!t)return;
+ if(t.id==='close'){document.getElementById('dlg').close();return}
+ if(t.id==='del'){if(confirm('Hapus laporan ini?')){reports=reports.filter(function(x){return x.id!==t.dataset.id});save();document.getElementById('dlg').close();render()}return}
+ if(t.id==='adv'){var n=reports.filter(function(r){return r.status<2})[0];if(n){n.status++;save();render();toast('Status diperbarui: '+ST[n.status][0])}else toast('Semua laporan sudah selesai');return}
+ if(t.id==='prof'){toast('Masuk sebagai Mahasiswa ITS');return}
+ if(t.id==='send'){submit();return}
+ if(t.id==='rm'){e.stopPropagation();draft.photo='';drop();return}
+ if(t.id==='drop'){document.getElementById('file').click();return}
+ if(t.dataset.p){go(t.dataset.p);return}
+ if(t.dataset.c!==undefined){draft.cat=+t.dataset.c;chips();return}
+ if(t.dataset.id){detail(t.dataset.id)}
+});
+document.addEventListener('keydown',function(e){if(e.target.id==='drop'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();document.getElementById('file').click()}});
+document.addEventListener('change',function(e){
+ if(e.target.id==='file'&&e.target.files[0])shrink(e.target.files[0],function(u){draft.photo=u;drop()});
+});
+document.addEventListener('input',function(e){if(e.target.id==='desc')draft.desc=e.target.value;if(e.target.id==='loc')draft.loc=e.target.value});
+load();
+if(!reports.length&&!localStorage.getItem(KEY+'-seeded')){
+ var n=Date.now(),D=864e5;
+ reports=[
+  {id:'s1',ts:n-4*D,cat:0,title:'Kaki meja longgar',desc:'Kaki meja di ruang kuliah goyang.',loc:'Gedung A · Ruang 103',photo:'',status:0},
+  {id:'s2',ts:n-3*D,cat:2,title:'Tempat sampah penuh',desc:'Tempat sampah belum diangkut.',loc:'Pusat Mahasiswa · Lantai Dasar',photo:'',status:2},
+  {id:'s3',ts:n-1*D,cat:1,title:'Lampu koridor tidak menyala',desc:'Lampu koridor mati sejak kemarin.',loc:'Perpustakaan · Lantai 2',photo:'',status:1},
+  {id:'s4',ts:n,cat:0,title:'Kursi rusak di kelas',desc:'Sandaran kursi patah.',loc:'Gedung D · Ruang 201',photo:'',status:0}];
+ save();try{localStorage.setItem(KEY+'-seeded','1')}catch(e){}
+}
+nav();render();
+</script>
+</body>
+</html>
